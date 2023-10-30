@@ -69,7 +69,8 @@ export default function TelaInicial({ navigation }) {
         <FlatList
         data={data}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate('Formulario', item.name, item.estacao)}>
+          <TouchableOpacity onPress={() => { navigation.navigate('Formulario', {tipo: item.name, estacao:item.estacao})}
+          }>
             <View style={{ flexDirection: 'row' , marginBottom: 10, marginTop: 10}}>
               <Image
                 source={item.image}

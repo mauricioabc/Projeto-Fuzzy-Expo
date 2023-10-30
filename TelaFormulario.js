@@ -17,10 +17,12 @@ export default function TelaFormulario({ navigation, route }) {
   const [calagem, setCalagem] = useState('');
   const [npk, setNpk] = useState('');
   const [nitrogenio, setNitrogenio] = useState('');
-  const [apiUrl, setApiUrl] = useState('http://192.168.1.69:5001');
+  const [materiaOrganica, setMateriaOrganica] = useState('');
+  const [teorArgila, setTeorArgila] = useState('');
+  const [apiUrl, setApiUrl] = useState('http://10.151.34.41:5001');
   const errorMessageApi = 'Houve uma falha de comunicação.';
 
-  const tipo, estacao = route.params
+  const {tipo, estacao} = route.params
 
   enviarRequisicao = () => {
     const jsonData = {
@@ -47,6 +49,7 @@ export default function TelaFormulario({ navigation, route }) {
     .then(data => {
       console.log('Resposta da API:', data);
       setCalagem(data.message)
+      console.log(data.message)
     })
     .catch(error => {
       setCalagem(errorMessageApi)
@@ -61,11 +64,11 @@ export default function TelaFormulario({ navigation, route }) {
         "Estacao": estacao,
         "TipoPlantio": "Convencional",
         "NivelNitrogenio": nitrogenio,
-        "EficienciaInoculacao": "true",
+        "EficienciaInoculacao": inoculacao,
         "NivelFosforo": p,
         "NivelPotassio": k,
-        "MateriaOrganica": "4.1",
-        "TeorArgila": "45",
+        "MateriaOrganica": materiaOrganica,
+        "TeorArgila": teorArgila,
         "CTC": ctc
       };
       fetch(apiUrl + '/ProcessaAdubacao', {
@@ -79,7 +82,7 @@ export default function TelaFormulario({ navigation, route }) {
       .then(data => {
         console.log('Resposta da API:', data);
         setNpk(data.message)
-        setNitrogenio(data.message2)
+        console.log('message'+data.message)
       })
       .catch(error => {
         setNpk(errorMessageApi);
@@ -93,7 +96,7 @@ export default function TelaFormulario({ navigation, route }) {
 
   const confirmar = () => {
     navigation.navigate('Resultado', {
-      calagem, npk, nitrogenio
+      calagem, npk
     });
     
   };
@@ -191,11 +194,29 @@ export default function TelaFormulario({ navigation, route }) {
           value={inoculacao}
           onChangeText={(text) => setInoculacao(text)}
         />
+        </View>
+
+      <View style={styles.campo}>
+        <Text style={{fontWeight: 'bold'}}>Materia Orgânica:</Text>
+        <TextInput
+          style={styles.input}
+          value={materiaOrganica}
+          onChangeText={(text) => setMateriaOrganica(text)}
+        />
+        </View>
+
+      <View style={styles.campo}>
+        <Text style={{fontWeight: 'bold'}}>Teor de Argila:</Text>
+        <TextInput
+          style={styles.input}
+          value={teorArgila}
+          onChangeText={(text) => setTeorArgila(text)}
+        />
       </View>
 
     </View>
     
-    <View style={{marginTop: 300}}>
+    <View style={{marginTop: 400}}>
       <Button title="Confirmar" onPress={enviarRequisicao} color="forestgreen"  />
     </View>
     </ScrollView>
