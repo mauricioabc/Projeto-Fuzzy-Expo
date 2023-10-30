@@ -20,7 +20,7 @@ export default function TelaFormulario({ navigation, route }) {
   const [apiUrl, setApiUrl] = useState('http://192.168.1.69:5001');
   const errorMessageApi = 'Houve uma falha de comunicação.';
 
-  const tipo = route.params
+  const tipo, estacao = route.params
 
   enviarRequisicao = () => {
     const jsonData = {
@@ -58,10 +58,15 @@ export default function TelaFormulario({ navigation, route }) {
       const jsonData2 = {
         "Especie": "Forrageira",
         "Cultura": tipo,
+        "Estacao": estacao,
         "TipoPlantio": "Convencional",
-        'Nível de Fósforo (P)' : p,
-        'Nível de Potássio (K)': k,
-        'Eficiência de Inoculação': inoculacao
+        "NivelNitrogenio": nitrogenio,
+        "EficienciaInoculacao": "true",
+        "NivelFosforo": p,
+        "NivelPotassio": k,
+        "MateriaOrganica": "4.1",
+        "TeorArgila": "45",
+        "CTC": ctc
       };
       fetch(apiUrl + '/ProcessaAdubacao', {
       method: 'POST',
