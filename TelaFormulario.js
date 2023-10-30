@@ -15,6 +15,9 @@ export default function TelaFormulario({ navigation, route }) {
   const [k, setK] = useState('');
   const [inoculacao, setInoculacao] = useState('');
   const [calagem, setCalagem] = useState('');
+  const [necessidadeFosforo, setNecessidadeFosforo] = useState('');
+  const [necessidadePotassio, setNecessidadePotassio] = useState('');
+  const [necessidadeNitrogenio, setNecessidadeNitrogenio] = useState('');
   const [npk, setNpk] = useState('');
   const [nitrogenio, setNitrogenio] = useState('');
   const [materiaOrganica, setMateriaOrganica] = useState('');
@@ -81,22 +84,31 @@ export default function TelaFormulario({ navigation, route }) {
       .then(response => response.json())
       .then(data => {
         console.log('Resposta da API:', data);
-        setNpk(data.message)
-        console.log('message'+data.message)
+        // Acesso aos dados específicos retornados pela API de Adubação
+      const resultadoAdubacao = data.message;
+      const necessidadeN = resultadoAdubacao.N;
+      const necessidadeP = resultadoAdubacao.P;
+      const necessidadeK = resultadoAdubacao.K;
+      setNecessidadeFosforo(necessidadeP)
+      setNecessidadeNitrogenio(necessidadeN)
+      setNecessidadePotassio(necessidadeK)
+  
+      console.log('Necessidade de N (Adubação):', necessidadeNitrogenio);
+      console.log('Necessidade de P (Adubação):', necessidadeFosforo);
+      console.log('Necessidade de K (Adubação):', necessidadePotassio);
+      
       })
       .catch(error => {
-        setNpk(errorMessageApi);
-        setNitrogenio(errorMessageApi);
         console.error('Erro na solicitação:', error);
         console.error('Mensagem de erro:', error.message);
-        console.error('Pilha de execução:', error.stack);
+        console.error('Pilha de execução:', error.st-ack);
       });
       confirmar()
   }
 
   const confirmar = () => {
     navigation.navigate('Resultado', {
-      calagem, npk
+      calagem, necessidadeNitrogenio, necessidadeFosforo, necessidadePotassio
     });
     
   };
@@ -188,11 +200,20 @@ export default function TelaFormulario({ navigation, route }) {
       </View>
 
       <View style={styles.campo}>
-        <Text style={{fontWeight: 'bold'}}>Eficiência da Inoculação:</Text>
+        <Text style={{fontWeight: 'bold'}}>Nitrogênio:</Text>
+        <TextInput
+          style={styles.input}
+          value={nitrogenio}
+          onChangeText={(text) => setNitrogenio(text)}
+        />
+      </View>
+
+      <View style={styles.campo}>
+        <Text style={{fontWeight: 'bold'}}>Eficiência da Inoculação(true/false):</Text>
         <TextInput
           style={styles.input}
           value={inoculacao}
-          onChangeText={(text) => setInoculacao(text)}
+          onChangeText={(text) => {setInoculacao(text)}}
         />
         </View>
 
@@ -216,7 +237,7 @@ export default function TelaFormulario({ navigation, route }) {
 
     </View>
     
-    <View style={{marginTop: 400}}>
+    <View style={{marginTop: 430}}>
       <Button title="Confirmar" onPress={enviarRequisicao} color="forestgreen"  />
     </View>
     </ScrollView>

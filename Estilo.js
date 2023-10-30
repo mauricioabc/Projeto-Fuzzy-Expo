@@ -12,6 +12,18 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center'
   },
+  radioGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  
+  radioButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 20,
+  },
   containerCampo: {
     flex: 1,
     width: '100%',
@@ -49,6 +61,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    flexWrap:'wrap'
   },
   input: {
     fontSize: 16,

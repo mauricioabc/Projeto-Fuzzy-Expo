@@ -3,9 +3,7 @@ import { View, Text, Button} from 'react-native';
 import styles from './Estilo';
 
 export default function TelaConfirmacao({route, navigation }) {
-  const { calagem, npk } = route.params;
-  console.log(calagem)
-  console.log(npk)
+  const { calagem, necessidadeNitrogenio, necessidadeFosforo, necessidadePotassio } = route.params;
 
   return (
     <View style={styles.containerTelaFormulario}>
@@ -16,8 +14,16 @@ export default function TelaConfirmacao({route, navigation }) {
           <Text>{calagem}</Text>
         </View>
         <View style={styles.campoConf}>
-          <Text style={styles.texto} >NPK: </Text>
-          <Text>{npk}</Text>
+          <Text style={styles.texto} >Necessidade de N (Adubação): </Text>
+          <Text>{necessidadeNitrogenio}</Text>
+        </View>
+        <View style={styles.campoConf}>
+          <Text style={styles.texto} >Necessidade de P (Adubação): </Text>
+          <Text>{necessidadeFosforo}</Text>
+        </View>
+        <View style={styles.campoConf}>
+          <Text style={styles.texto} >Necessidade de K (Adubação): </Text>
+          <Text>{necessidadePotassio}</Text>
         </View>
         
       </View>
