@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   campoConf: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 8,
     flexWrap:'wrap'
   },
   input: {
@@ -85,12 +85,7 @@ const styles = StyleSheet.create({
   itemText: {
     marginLeft: 16,
     fontSize: 18,
-  },
-  image: {
-    width: 50,
-    height: 50,
-  },
-  
+  }
   
 });
 

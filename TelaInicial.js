@@ -1,94 +1,103 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, ActivityIndicator } from 'react-native';
 import styles from './Estilo';
 
 export default function TelaInicial({ navigation }) {
 
-  const data = [
-    {
-      title: 'Alfafa',
-      name: 'Alfafa', 
-      estacao: '',
-      image: require('./assets/alfafa.jpeg'),
-    },
-    {
-      title: 'Gramíneas de estação fria',
-      name: 'Gramíneas', 
-      estacao: 'fria',
-      image: require('./assets/gramineas_fria.jpeg'),
-    },
-    {
-      title: 'Gramíneas de estação quente',
-      name: 'Gramíneas', 
-      estacao: 'quente',
-      image: require('./assets/gramineas_quente.jpeg'),
-    },
-    {
-      title: 'Leguminosas de estação fria',
-      name: 'Leguminosas',
-      estacao: 'fria', 
-      image: require('./assets/leguminosas_fria.jpeg'),
-    },
-    {
-      title: 'Leguminosas de estação quente',
-      name: 'Leguminosas',
-      estacao: 'quente', 
-      image: require('./assets/leguminosas_quante.jpeg'),
-    },
-    {
-      title: 'Consorciações de gramíneas e de leguminosas de estação quente',
-      name: 'Consórcios', 
-      estacao: 'quente',
-      image: require('./assets/consorciacoes.jpeg'),
-    },
-    {
-      title: 'Milho e sorgo para silagem',
-      name: 'Espécies perenes', 
-      estacao: '',
-      image: require('./assets/milho_sorgo.jpeg'),
-    },
-    {
-      title: 'Pastagens naturais (nativas ou naturalizadas)',
-      name: 'Campo natural', 
-      estacao: '',
-      image: require('./assets/pastagem_natural.jpeg'),
-    },
-    {
-      title: 'Pastagens naturais com introdução de gramíneas e leguminosas',
-      name: 'Campo natural', 
-      estacao: '',
-      image: require('./assets/pastagem_leguminosa_graminea.jpeg'),
-    },
-    
-  ];
+    const [nomeDescricao, setNomeDescricao] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
+    async function obterRespostaDoChat() {
+      if (!nomeDescricao) {
+        alert('Erro: o nome ou descrição da planta é necessário.');
+        return; 
+      }
+      
+      console.log('Iniciando integração com a API.')
+      setIsLoading(true);
+
+      const endpoint = 'https://api.openai.com/v1/chat/completions';
+      const apiKey = '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';
+    
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      };
+      
+      const input = 'Você receberá uma entrada com o nome de uma planta ou uma breve descrição de que planta por de ser, a partir disso deve retornar um JSON com as seguintes informações: nome, nomecientifico, imagem, historia, usos, regiao e comocultivar. Obs: retorne APENAS o JSON. Entrada: ' + nomeDescricao
+
+      const requestBody = {
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: 'Você é um especialista em botânica.' },
+          { role: 'user', content: input }
+        ]
+      };
+    
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(requestBody)
+      });
+    
+      try {
+        const responseData = await response.json();
+        const respostaDoChatString = responseData.choices[0].message.content;
+        console.log('Resposta da API:');
+        console.log(respostaDoChatString);
+
+        const respostaDoChat = JSON.parse(respostaDoChatString);
+
+        const nome = respostaDoChat.nome;
+        const nomeCientifico = respostaDoChat.nomecientifico;
+        const imagem = respostaDoChat.imagem;
+        const historia = respostaDoChat.historia;
+        const usos = respostaDoChat.usos;
+        const regiao = respostaDoChat.regiao;
+        const comoCultivar = respostaDoChat.comocultivar;
+
+        console.log('Integração realizada com sucesso.');
+        confirmar(nome, nomeCientifico, imagem, historia, usos, regiao, comoCultivar);
+      } catch (error) {
+        console.error('Erro ao processar resposta JSON:', error);
+      } finally {
+      setIsLoading(false);
+      }
+      
+    }
+
+    const confirmar = (nome,  nomeCientifico, imagem, historia, usos, regiao, comoCultivar) => {
+      if (nome) {
+        navigation.navigate('Resultado', { nome,  nomeCientifico, imagem, historia, usos, regiao, comoCultivar});
+      } else {
+        console.error('Dados de resposta inesperados:', nome,  nomeCientifico, imagem, historia, usos, regiao, comoCultivar);
+      }
+    };
+    
     return (
-    //<ScrollView>
-        <View>
-          <Text style={styles.titulo}>Escolha o tipo de forrageira:</Text>
-        <FlatList
-        data={data}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => { navigation.navigate('Formulario', {tipo: item.name, estacao:item.estacao})}
-          }>
-            <View style={{ flexDirection: 'row' , marginBottom: 10, marginTop: 10}}>
-              <Image
-                source={item.image}
-                style={styles.image}
-              />
-              <Text style={{flexWrap: 'wrap', fontWeight: 'bold'}}>{item.title}</Text>
-            </View>
-          </TouchableOpacity>)}
-          ItemSeparatorComponent={() => (
-            // Componente que renderiza o separador
-            <View style={{ height: 1, backgroundColor: 'gray' }} />
-          )}
-        keyExtractor={(item) => item.title}
-      />
+      <View style={styles.containerTelaFormulario}>
+        <Text style={styles.titulo}>Informe uma planta:</Text>
+        <View style={styles.formulario}>
+        <View style={styles.campo}>
+          <Text style={{fontWeight: 'bold'}} >Nome ou Descrição:</Text>
+          <TextInput
+            style={styles.input}
+            value={nomeDescricao}
+            onChangeText={(text) => setNomeDescricao(text)}
+          />
+        </View>
+
       </View>
-    //</ScrollView>
+      
+      <View style={{ marginTop: -140 }}>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="forestgreen" />
+        ) : (
+          <Button title="Confirmar" onPress={obterRespostaDoChat} color="forestgreen" />
+        )}
+      </View>
+
+    </View>
     );
 
 }
-
-
