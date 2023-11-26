@@ -1,28 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button, Alert } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from './Firebase';
 
-export default function TelaCadastro({ navigation }) {
+export default function TelaRecuperarSenha({ navigation }) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
 
-  const criarConta = () => {
-    if (!email || !password || !repeatPassword) {
-      Alert.alert('Erro', 'Por favor, preencha o email e a senha.');
+  const recuperarSenha = () => {
+    if (!email) {
+      Alert.alert('Erro', 'Por favor, preencha o email.');
       return;
     }
 
-    if (password !== repeatPassword) {
-      Alert.alert('Erro', 'As senhas não coincidem.');
-      return;
-    }
-
-    createUserWithEmailAndPassword(auth, email, password)
+    sendPasswordResetEmail(auth, email)
       .then((userCredential) => {
-        const user = userCredential.user;
-        Alert.alert('Sucesso', 'Conta criada com sucesso!');
+        Alert.alert('Sucesso', 'E-mail de recuperação de senha enviado com sucesso.');
         navigation.navigate('Login');
       })
       .catch((error) => {
@@ -34,7 +26,7 @@ export default function TelaCadastro({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>CRIAR CONTA</Text>
+      <Text style={styles.title}>RECUPERAR SENHA</Text>
 
       <TextInput
         style={styles.input}
@@ -43,26 +35,10 @@ export default function TelaCadastro({ navigation }) {
         value={email}
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Repetir Senha"
-        secureTextEntry
-        onChangeText={(text) => setRepeatPassword(text)}
-        value={repeatPassword}
-      />
-
     <View style={styles.cadastrar}>
       <Button
-          title="Confirmar"
-          onPress={criarConta}
+          title="Enviar"
+          onPress={recuperarSenha}
           color="forestgreen"
         />
       </View>
