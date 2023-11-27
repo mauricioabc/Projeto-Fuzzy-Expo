@@ -7,6 +7,8 @@ import TelaResultado from './TelaResultado';
 import TelaLogin from './TelaLogin';
 import TelaCadastro from './TelaCadastro';
 import TelaRecuperarSenha from './TelaRecuperarSenha';
+import TelaHistorico from './TelaHistorico';
+import DetalhesConsulta from './DetalhesConsulta';
 
 
 const Stack = createStackNavigator();
@@ -21,6 +23,8 @@ export default function Routes(){
         <Stack.Screen name="Forrageiras" component={TelaInicial } options={{ headerLeft: () => null, }} />
         <Stack.Screen name="Formulario" component={TelaFormulario} />
         <Stack.Screen name="Resultado" component={TelaResultado} />
+        <Stack.Screen name="Historico" component={TelaHistorico} />
+        <Stack.Screen name="DetalhesConsulta" component={DetalhesConsulta} />
       </Stack.Navigator>
     </NavigationContainer>
     );

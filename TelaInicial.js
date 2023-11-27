@@ -82,6 +82,10 @@ export default function TelaInicial({ navigation }) {
     navigation.navigate('Login');
   }
 
+  const historico = () => {
+    navigation.navigate('Historico');
+  }
+
     return (
       <View>
           <Text style={styles.titulo}>Escolha o tipo de forrageira:</Text>
@@ -109,6 +113,14 @@ export default function TelaInicial({ navigation }) {
           <Button
             title="Sair"
             onPress={logout}
+            color="forestgreen"
+          />
+        </View>
+
+        <View style={styles.HistButton}>
+          <Button
+            title="Histórico"
+            onPress={historico}
             color="forestgreen"
           />
         </View>

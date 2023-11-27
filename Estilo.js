@@ -96,6 +96,12 @@ const styles = StyleSheet.create({
     marginLeft: '55%',
     marginTop: '4%'
   }, 
+  HistButton: {
+    width: '40%',
+    height: '100',
+    marginLeft: '4%',
+    marginTop: '-9.1%'
+  }, 
   
 });
 
