@@ -41,8 +41,8 @@ export default function TelaHistorico() {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => navigateToDetalhes(item)}>
             <View style={styles.consultaItem}>
-              <Text>ID: {item.id}</Text>
-              {/* Adicione aqui mais componentes Text ou outros para exibir outros detalhes da consulta */}
+              <Text>Consulta: {item.id}</Text>
+              <Text>Data: {item.insertDate.toDate().toLocaleString()}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -70,4 +70,5 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 5,
   },
+
 });
