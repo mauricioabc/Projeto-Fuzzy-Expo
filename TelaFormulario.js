@@ -25,7 +25,7 @@ export default function TelaFormulario({ navigation, route }) {
   const [nitrogenio, setNitrogenio] = useState('');
   const [materiaOrganica, setMateriaOrganica] = useState('');
   const [teorArgila, setTeorArgila] = useState('');
-  const [apiUrl, setApiUrl] = useState('http://192.168.1.64:5001');
+  const [apiUrl, setApiUrl] = useState('http://127.0.0.1:5001');
   const errorMessageApi = 'Houve uma falha de comunicação.';
 
   const {tipo, estacao} = route.params
@@ -127,7 +127,7 @@ export default function TelaFormulario({ navigation, route }) {
       .then(response => response.json())
       .then(data => {
         console.log('Resposta da API:', data);
-        // Acesso aos dados específicos retornados pela API de Adubação
+
       const resultadoAdubacao = data.message;
       const necessidadeN = resultadoAdubacao.N;
       const necessidadeP = resultadoAdubacao.P;

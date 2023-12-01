@@ -103,7 +103,6 @@ export default function TelaInicial({ navigation }) {
             </View>
           </TouchableOpacity>)}
           ItemSeparatorComponent={() => (
-            // Componente que renderiza o separador
             <View style={{ height: 1, backgroundColor: 'gray' }} />
           )}
         keyExtractor={(item) => item.title}
