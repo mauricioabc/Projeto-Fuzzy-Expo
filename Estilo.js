@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   botaoVoltar: {
     marginBottom: 20,
-    width: 160,
+    width: 260,
   },
   item: {
     flexDirection: 'row',
@@ -90,9 +90,19 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
-  
+  logoutButton: {
+    width: '40%',
+    height: '100',
+    marginLeft: '55%',
+    marginTop: '4%'
+  }, 
+  HistButton: {
+    width: '40%',
+    height: '100',
+    marginLeft: '4%',
+    marginTop: '-9.1%'
+  }, 
   
 });
 
-
-  export default styles;
+export default styles;

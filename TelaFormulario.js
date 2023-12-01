@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView} from 'react-native';
+import { View, Text, TextInput, Button, ScrollView, Alert} from 'react-native';
 import styles from './Estilo';
+import { addDoc, collection, getDocs, query, orderBy, limit, serverTimestamp } from 'firebase/firestore';
+import { db } from './Firebase'
+import { getAuth } from 'firebase/auth';
 
 export default function TelaFormulario({ navigation, route }) {
 
@@ -22,10 +25,50 @@ export default function TelaFormulario({ navigation, route }) {
   const [nitrogenio, setNitrogenio] = useState('');
   const [materiaOrganica, setMateriaOrganica] = useState('');
   const [teorArgila, setTeorArgila] = useState('');
-  const [apiUrl, setApiUrl] = useState('http://10.151.34.41:5001');
+  const [apiUrl, setApiUrl] = useState('http://127.0.0.1:5001');
   const errorMessageApi = 'Houve uma falha de comunicação.';
 
   const {tipo, estacao} = route.params
+  const auth = getAuth();
+
+  const salvaDadosConsulta = async () => {
+    const consultaRef = collection(db, 'Hist_Consultas');
+    const consultaQuery = query(consultaRef, orderBy('id', 'desc'), limit(1));
+    const consultaSnapshot = await getDocs(consultaQuery);
+    let proximoId = 1;
+    if (!consultaSnapshot.empty) {
+      const ultimoDocumento = consultaSnapshot.docs[0];
+      proximoId = ultimoDocumento.data().id + 1;
+    }
+
+    await addDoc(collection(db, 'Hist_Consultas'), {
+      id: proximoId,
+      user: auth.currentUser.uid,
+      useremail: auth.currentUser.email,
+      ph,
+      smp,
+      ctc,
+      bases,
+      alSat,
+      ca,
+      mg,
+      p,
+      k,
+      inoculacao,
+      calagem,
+      necessidadeFosforo,
+      necessidadePotassio,
+      necessidadeNitrogenio,
+      npk,
+      nitrogenio,
+      materiaOrganica,
+      teorArgila,
+      insertDate: serverTimestamp(),
+    })
+    .then(() => {
+      Alert.alert('Sucesso', 'Dados salvos com sucesso.')
+    })
+  }
 
   enviarRequisicao = () => {
     const jsonData = {
@@ -84,7 +127,7 @@ export default function TelaFormulario({ navigation, route }) {
       .then(response => response.json())
       .then(data => {
         console.log('Resposta da API:', data);
-        // Acesso aos dados específicos retornados pela API de Adubação
+
       const resultadoAdubacao = data.message;
       const necessidadeN = resultadoAdubacao.N;
       const necessidadeP = resultadoAdubacao.P;
@@ -103,6 +146,7 @@ export default function TelaFormulario({ navigation, route }) {
         console.error('Mensagem de erro:', error.message);
         console.error('Pilha de execução:', error.st-ack);
       });
+      salvaDadosConsulta()
       confirmar()
   }
 

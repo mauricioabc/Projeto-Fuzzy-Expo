@@ -4,7 +4,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TelaInicial from './TelaInicial';
 import TelaFormulario from './TelaFormulario';
 import TelaResultado from './TelaResultado';
-import TelaSobre from './TelaSobre';
+import TelaLogin from './TelaLogin';
+import TelaCadastro from './TelaCadastro';
+import TelaRecuperarSenha from './TelaRecuperarSenha';
+import TelaHistorico from './TelaHistorico';
+import DetalhesConsulta from './DetalhesConsulta';
+
 
 const Stack = createStackNavigator();
 
@@ -12,10 +17,14 @@ export default function Routes(){
     return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Seja Bem-Vindo">
-      <Stack.Screen name="Seja Bem-Vindo" component={TelaSobre} />
-        <Stack.Screen name="Forrageiras" component={TelaInicial} />
+        <Stack.Screen name="Login" component={TelaLogin} options={{ headerShown: false }} />
+        <Stack.Screen name="Cadastro" component={TelaCadastro} />
+        <Stack.Screen name="Recuperar" component={TelaRecuperarSenha} />
+        <Stack.Screen name="Forrageiras" component={TelaInicial } options={{ headerLeft: () => null, }} />
         <Stack.Screen name="Formulario" component={TelaFormulario} />
         <Stack.Screen name="Resultado" component={TelaResultado} />
+        <Stack.Screen name="Historico" component={TelaHistorico} />
+        <Stack.Screen name="DetalhesConsulta" component={DetalhesConsulta} />
       </Stack.Navigator>
     </NavigationContainer>
     );

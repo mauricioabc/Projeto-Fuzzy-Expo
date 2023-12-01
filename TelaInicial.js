@@ -1,8 +1,23 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { React, useEffect } from 'react';
+import { View, Text, FlatList, Image, TouchableOpacity, BackHandler, Button, Alert } from 'react-native';
 import styles from './Estilo';
 
 export default function TelaInicial({ navigation }) {
+  useEffect(() => {
+    const handleBackButton = () => {
+      if (navigation.isFocused()) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+
+  }, [navigation]);
 
   const data = [
     {
@@ -62,9 +77,17 @@ export default function TelaInicial({ navigation }) {
     
   ];
 
+  const logout = () => {
+    Alert.alert('Sucesso', 'Logout realizado com sucesso.');
+    navigation.navigate('Login');
+  }
+
+  const historico = () => {
+    navigation.navigate('Historico');
+  }
+
     return (
-    //<ScrollView>
-        <View>
+      <View>
           <Text style={styles.titulo}>Escolha o tipo de forrageira:</Text>
         <FlatList
         data={data}
@@ -80,15 +103,30 @@ export default function TelaInicial({ navigation }) {
             </View>
           </TouchableOpacity>)}
           ItemSeparatorComponent={() => (
-            // Componente que renderiza o separador
             <View style={{ height: 1, backgroundColor: 'gray' }} />
           )}
         keyExtractor={(item) => item.title}
       />
-      </View>
-    //</ScrollView>
-    );
 
+        <View style={styles.logoutButton}>
+          <Button
+            title="Sair"
+            onPress={logout}
+            color="forestgreen"
+          />
+        </View>
+
+        <View style={styles.HistButton}>
+          <Button
+            title="Histórico"
+            onPress={historico}
+            color="forestgreen"
+          />
+        </View>
+
+      </View>
+    );
 }
+
 
 

@@ -31,9 +31,9 @@ export default function TelaConfirmacao({route, navigation }) {
 
       <View style={styles.containerBototoesConf}>
         <View style={styles.botaoVoltar}>
-        <Button title="Voltar" style={styles.botaoVoltar} onPress={() => navigation.goBack()} color="forestgreen"/>
+        <Button title="Voltar para o Formulário" style={styles.botaoVoltar} onPress={() => navigation.goBack()} color="forestgreen"/>
         </View>
-        <Button title="Voltar para o início" onPress={() => navigation.popToTop()} color="forestgreen" />
+        <Button title="Voltar para a tela de seleção" onPress={() => navigation.navigate('Forrageiras')} color="forestgreen" />
       </View>
       
     </View>
