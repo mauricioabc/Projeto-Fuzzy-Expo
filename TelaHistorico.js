@@ -1,52 +1,49 @@
-// HistoricoConsultas.js
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
-import { db } from './Firebase';
+import { Calendar } from 'react-native-calendars';
 
 export default function TelaHistorico() {
-  const [historico, setHistorico] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [markedDates, setMarkedDates] = useState({});
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const carregarHistorico = async () => {
-      try {
-        const consultaRef = collection(db, 'Hist_Consultas');
-        const consultaQuery = query(consultaRef, orderBy('insertDate', 'desc'));
-
-        const consultaSnapshot = await getDocs(consultaQuery);
-        const historicoData = consultaSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
-        setHistorico(historicoData);
-      } catch (error) {
-        console.error('Erro ao carregar histórico:', error);
-      }
-    };
-
-    carregarHistorico();
-  }, []);
-
-  const navigateToDetalhes = (consulta) => {
-    navigation.navigate('DetalhesConsulta', { consulta });
+  const navigateToDetalhesHistorico = () => {
+    if(selectedDate == null){
+      Alert.alert('Erro', 'Selecione um data.');
+      return;
+    }
+    navigation.navigate('HistoricoDetalhes', { selectedDate });
   };
 
+  const onDayPress = (day) => {
+    console.log('day.dateString:', day.dateString);
+    console.log('new Date(day.dateString):', new Date(day.dateString));
+  
+    const date = new Date(day.dateString);
+    console.log('selectedTimestamp:', date);
+  
+    setSelectedDate(date.toISOString());
+    setMarkedDates({
+      [day.dateString]: { selected: true, marked: true, selectedColor: 'blue' },
+    });
+  };
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Histórico de Consultas</Text>
-      
-      <FlatList
-        data={historico}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigateToDetalhes(item)}>
-            <View style={styles.consultaItem}>
-              <Text>Consulta: {item.id}</Text>
-              <Text>Data: {item.insertDate.toDate().toLocaleString()}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
+
+      <Calendar style={styles.calendario}
+        markedDates={markedDates}
+        onDayPress={onDayPress}
       />
+
+      <View style={styles.containerBototoesConf}>
+        <View style={styles.botaoVoltar}>
+          <Button title="Pesquisar" style={styles.botaoVoltar} onPress={() => navigateToDetalhesHistorico()} color="forestgreen"/>
+        </View>
+      </View>
+
     </View>
   );
 }
@@ -69,6 +66,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 5,
+  },
+  botaoVoltar: {
+    marginBottom: 20,
+    width: 260,
+  },
+  calendario: {
+    marginBottom: 20,
+    width: 350,
   },
 
 });

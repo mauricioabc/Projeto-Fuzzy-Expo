@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, Alert} from 'react-native';
+import { View, Text, TextInput, Button, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import styles from './Estilo';
 import { addDoc, collection, getDocs, query, orderBy, limit, serverTimestamp } from 'firebase/firestore';
 import { db } from './Firebase'
@@ -27,7 +27,8 @@ export default function TelaFormulario({ navigation, route }) {
   const [teorArgila, setTeorArgila] = useState('');
   const [apiUrl, setApiUrl] = useState('http://127.0.0.1:5001');
   const errorMessageApi = 'Houve uma falha de comunicação.';
-
+  const [isLoading, setIsLoading] = useState(false);
+  
   const {tipo, estacao} = route.params
   const auth = getAuth();
 
@@ -83,6 +84,9 @@ export default function TelaFormulario({ navigation, route }) {
       "AlSat": String(alSat),
       "CTC": String(ctc)
     };
+
+    console.log('Iniciando integração com a API.')
+    setIsLoading(true);
 
     fetch(apiUrl + '/ProcessaCalagem', {
     method: 'POST',
@@ -147,14 +151,18 @@ export default function TelaFormulario({ navigation, route }) {
         console.error('Pilha de execução:', error.st-ack);
       });
       salvaDadosConsulta()
-      confirmar()
+      .then(() => {
+        confirmar();
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.error('Erro ao salvar ou confirmar:', error);
+      });
   }
 
   const confirmar = () => {
-    navigation.navigate('Resultado', {
-      calagem, necessidadeNitrogenio, necessidadeFosforo, necessidadePotassio
-    });
-    
+    navigation.navigate('Resultado');
   };
 
   return (
@@ -282,7 +290,11 @@ export default function TelaFormulario({ navigation, route }) {
     </View>
     
     <View style={{marginTop: 430}}>
-      <Button title="Confirmar" onPress={enviarRequisicao} color="forestgreen"  />
+      {isLoading ? (
+          <ActivityIndicator size="large" color="forestgreen" />
+        ) : (
+          <Button title="Confirmar" onPress={enviarRequisicao} color="forestgreen" />
+        )}
     </View>
     </ScrollView>
   </View>

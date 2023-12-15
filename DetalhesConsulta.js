@@ -1,9 +1,15 @@
 // DetalhesConsulta.js
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function DetalhesConsulta({ route }) {
   const { consulta } = route.params;  
+  const navigation = useNavigation();
+
+  const handleVoltar = () => {
+    navigation.goBack();
+  };
 
   return (
     <View style={styles.container}>
@@ -39,6 +45,7 @@ export default function DetalhesConsulta({ route }) {
           <Button
             title="Voltar"
             color="forestgreen"
+            onPress={() => handleVoltar()}
           />
         </View>
 
@@ -50,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'flex-start', // Alinhar à esquerda
+    alignItems: 'flex-start',
     padding: 20,
   },
   title: {

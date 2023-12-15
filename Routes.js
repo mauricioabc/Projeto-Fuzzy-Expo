@@ -9,6 +9,7 @@ import TelaCadastro from './TelaCadastro';
 import TelaRecuperarSenha from './TelaRecuperarSenha';
 import TelaHistorico from './TelaHistorico';
 import DetalhesConsulta from './DetalhesConsulta';
+import TelaHistoricoDetalhes from './TelaHistoricoDetalhes';
 
 
 const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ export default function Routes(){
         <Stack.Screen name="Formulario" component={TelaFormulario} />
         <Stack.Screen name="Resultado" component={TelaResultado} />
         <Stack.Screen name="Historico" component={TelaHistorico} />
+        <Stack.Screen name="HistoricoDetalhes" component={TelaHistoricoDetalhes} />
         <Stack.Screen name="DetalhesConsulta" component={DetalhesConsulta} />
       </Stack.Navigator>
     </NavigationContainer>
