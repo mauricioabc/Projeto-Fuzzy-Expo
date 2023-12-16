@@ -24,10 +24,16 @@ cd Projeto-Fuzzy-Expo
 npm install
 ```
 
-4. Inicie o aplicativo:
+4. Instale o yard:
 
 ```bash
-npm start
+npm install yarn add expo
+```
+
+5. Inicie o aplicativo:
+
+```bash
+npx expo start
 ```
 
 Isso abrirá o aplicativo no seu emulador ou dispositivo móvel.
