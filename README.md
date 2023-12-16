@@ -54,6 +54,11 @@ Certifique-se de que a API do backend esteja configurada corretamente. Acesse [P
 
 Se você deseja contribuir para o desenvolvimento deste projeto, sinta-se à vontade para abrir issues ou pull requests. Seu feedback e envolvimento são muito bem-vindos!
 
+## Referências
+- [React Native](https://reactnative.dev)
+- [Node.js](https://nodejs.org/en)
+- [Expo Go](https://expo.dev/client)
+
 ## Licença
 
 Este projeto está licenciado sob a [Licença MIT](LICENSE).
